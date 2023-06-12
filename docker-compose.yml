@@ -1,10 +1,10 @@
-version: "3.9"
+version: "3"
     
 services:
   db:
-    image: mariadb
+    image: mysql
     volumes:
-      - db_data:/var/lib/mysql
+      - mysql:/var/lib/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: somewordpress
@@ -17,22 +17,31 @@ services:
       - db
     image: wordpress:latest
     restart: always
+    volumes: 
+    - ./my-wp:/var/www/html
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
+    # networks:
+      # - bridge
 
   nginx:
     depends_on: 
       - wordpress
-    image: nginx:1.18-alpine
+    image: nginx:alpine
+    container_name: nginx
     restart: always
-    command: "/bin/sh -c 'nginx -s reload; nginx -g \"daemon off;\"'"
+    #external_links:
+      #- wordpress:wordpress
+    #command: "/bin/sh -c 'nginx -s reload; nginx -g \"daemon off;\"'"
     ports:
       - "80:80"
     volumes:
       - ./nginx:/etc/nginx/conf.d
+    # networks:
+      # - bridge
 
 volumes:
-  db_data: {}
+  mysql: {}
