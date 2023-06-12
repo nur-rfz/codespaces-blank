@@ -1,6 +1,15 @@
 #!/bin/bash
 sudo apt update && sudo apt upgrade -y
-
+sudo apt update -y &&
+sudo apt install -y nginx
+sudo yum update -y
+sudo amazon-linux-extras install nginx1 -y
+sudo amazon-linux-extras enable nginx1
+sudo systemctl start nginx
+sudo yum update -y
+sudo amazon-linux-extras install nginx1 -y 
+sudo systemctl enable nginx
+sudo systemctl start nginx
 sudo apt install -y apt-transport-https ca-certificates curl software-properties-common gnupg-agent
 
 # install docker
@@ -32,4 +41,4 @@ echo "${nginx_conf}" > nginx/server.conf
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
-docker-compose up
+docker-compose up -d
